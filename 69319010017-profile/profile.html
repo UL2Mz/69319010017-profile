@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โปรไฟล์</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root{
+    --bg: #0d1117;
+    --card: #0d1117;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --dim: #8b949e;
+    --accent: #58a6ff;
+    --accent-2: #7ee787;
+    --key: #79c0ff;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0);
+    background-size: 22px 22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 40px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text);
+  }
+
+  .terminal{
+    width: 100%;
+    max-width: 640px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #0d1117;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 20px 50px rgba(0,0,0,0.55);
+    overflow: hidden;
+  }
+
+  .titlebar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 10px 14px;
+    background: #161b22;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dots{ display:flex; gap:7px; }
+  .dot{ width:11px; height:11px; border-radius:50%; }
+  .dot.red{ background:#ff5f56; }
+  .dot.yellow{ background:#ffbd2e; }
+  .dot.green{ background:#27c93f; }
+
+  .titlebar .path{
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .copy-btn{
+    font-size: 11px;
+    color: var(--dim);
+    border: 1px solid var(--border);
+    background: transparent;
+    padding: 3px 7px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color .15s, border-color .15s;
+  }
+  .copy-btn:hover{ color: var(--text); border-color: var(--dim); }
+
+  .body{
+    padding: 22px 24px 26px;
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .rule{
+    color: var(--border);
+    user-select:none;
+    white-space:nowrap;
+    overflow:hidden;
+  }
+
+  .section-title{
+    color: var(--accent);
+    font-weight: 700;
+    margin: 20px 0 8px;
+  }
+  .section-title:first-of-type{ margin-top: 4px; }
+
+  .prompt{ color: var(--accent-2); }
+
+  .field{
+    margin: 2px 0;
+    color: var(--dim);
+    cursor: text;
+  }
+  .field .label{ color: var(--dim); }
+  .field .fill{
+    display:inline-block;
+    min-width: 140px;
+    border-bottom: 1px dashed var(--border);
+    color: var(--text);
+    outline: none;
+    padding: 0 2px;
+  }
+  .field .fill:focus{ border-bottom-color: var(--accent); }
+  .field .fill:empty:before{
+    content: attr(data-placeholder);
+    color: #4d5560;
+  }
+
+  ul.list{
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+  }
+  ul.list li{
+    margin: 3px 0;
+    color: var(--dim);
+  }
+  ul.list li:before{
+    content: "- ";
+    color: var(--border);
+  }
+  ul.list li .fill{
+    color: var(--key);
+    border-bottom: 1px dashed var(--border);
+    outline: none;
+    padding: 0 2px;
+  }
+  ul.list li .fill:focus{ border-bottom-color: var(--accent); }
+  ul.list li .fill:empty:before{
+    content: attr(data-placeholder);
+    color: #4d5560;
+  }
+
+  .msg-hint{
+    color: #4d5560;
+    font-size: 12.5px;
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  .msg-box{
+    margin-top: 8px;
+    min-height: 60px;
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    color: var(--text);
+    outline: none;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .msg-box:empty:before{
+    content: "พิมพ์ข้อความฝากถึงเจ้าของโปรไฟล์ที่นี่...";
+    color: #4d5560;
+  }
+  .msg-box:focus{ border-color: var(--accent); }
+
+  .cursor{
+    display:inline-block;
+    width: 8px;
+    height: 15px;
+    background: var(--accent-2);
+    vertical-align: -2px;
+    margin-left: 4px;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+
+  @media (max-width: 480px){
+    .body{ padding: 18px 16px 22px; font-size: 13px; }
+    .field .fill{ min-width: 100px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="terminal">
+    <div class="titlebar">
+      <div class="dots">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+      </div>
+      <span class="path">~/profile.md</span>
+      <button class="copy-btn" onclick="copyProfile()">copy</button>
+    </div>
+
+    <div class="body" id="profileContent">
+      <div class="rule">----------------------------------------</div>
+
+      <div class="section-title">เกี่ยวกับฉัน</div>
+      <div class="field"><span class="label">ชื่อ-นามสกุล</span><span class="fill" contenteditable="true" data-placeholder="พิมพ์ชื่อ...">พชรพล อยู่ดี</span></div>
+      <div class="field"><span class="label">รหัสนักศึกษา</span><span class="fill" contenteditable="true" data-placeholder="พิมพ์รหัส...">69319010017</span></div>
+      <ul class="list">
+        <li>อายุ <span class="fill" contenteditable="true" data-placeholder="พิมพ์อายุ...">18</span></li>
+        <li>งานอดิเรก <span class="fill" contenteditable="true" data-placeholder="พิมพ์งานอดิเรก...">เล่นเกม ดูอนิเมาะ</span></li>
+        <li>สิ่งที่สนใจ <span class="fill" contenteditable="true" data-placeholder="พิมพ์สิ่งที่สนใจ..."></span></li>
+      </ul>
+
+      <div class="section-title">ทักษะ</div>
+      <ul class="list">
+        <li><span class="fill" contenteditable="true" data-placeholder="HTML">HTML</span></li>
+        <li><span class="fill" contenteditable="true" data-placeholder="CSS">CSS</span></li>
+        <li><span class="fill" contenteditable="true" data-placeholder="Java">Java</span></li>
+        <li><span class="fill" contenteditable="true" data-placeholder="เพิ่มทักษะ..."></span></li>
+      </ul>
+
+      <div class="section-title">ช่องทางติดต่อ</div>
+      <ul class="list">
+        <li><span class="fill" contenteditable="true" data-placeholder="Email">Email</span></li>
+        <li><span class="fill" contenteditable="true" data-placeholder="GitHub">GitHub</span></li>
+      </ul>
+
+      <div class="rule">----------------------------------------</div>
+      <div class="section-title" style="margin-bottom:2px;">เพื่อนร่วมทีมฝากข้อความ</div>
+      <div class="rule">----------------------------------------</div>
+      <div class="msg-hint">(เว้นไว้ให้เพื่อนเพิ่มเอง)</div>
+      <div class="msg-box" contenteditable="true"></div>
+    </div>
+  </div>
+
+<script>
+function copyProfile(){
+  const el = document.getElementById('profileContent');
+  const range = document.createRange();
+  range.selectNode(el);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+  document.execCommand('copy');
+  window.getSelection().removeAllRanges();
+}
+</script>
+</body>
+</html>
